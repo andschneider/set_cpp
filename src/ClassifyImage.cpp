@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <initializer_list>
 #include <string>
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
@@ -24,17 +26,20 @@ cv::Mat ClassifyImage(cv::Mat inputImage) {
 
     // Threshold
     cv::Mat threshImage;
-    for (int i = 0; i < 3; i++ ){
-        cv::inRange(hsvImage, min_thresh[i], max_thresh[i], threshImage);
+    std::string color;
+    for (int i = 0; i < 3; i++) {
+      cv::inRange(hsvImage, min_thresh[i], max_thresh[i], threshImage);
 
-        double coloredPixels = cv::countNonZero(threshImage);
-        // std::cout << colors[i] << " non zero pixels: " << coloredPixels << std::endl;
-    
-        // TODO will this need a tollerance?
-        if ( coloredPixels > 0 ){
-          std::cout << " +++++ Color is: " << colors[i] << std::endl;
-          break;
-        }
+      double coloredPixels = cv::countNonZero(threshImage);
+      // std::cout << colors[i] << " non zero pixels: " << coloredPixels <<
+      // std::endl;
+
+      // TODO will this need a tollerance?
+      if (coloredPixels > 0) {
+        color = colors[i];
+        // std::cout << " +++++ Color is: " << colors[i] << std::endl;
+        break;
+      }
     }
 
     // Determine edges using Canny
@@ -48,7 +53,8 @@ cv::Mat ClassifyImage(cv::Mat inputImage) {
     cv::findContours(threshImage, contours, hierarchy, CV_RETR_EXTERNAL,
                     CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
 
-    std::cout << " +++++ Number of shapes: " << contours.size() << std::endl;
+    int numberShapes = contours.size();
+    // std::cout << " +++++ Number of shapes: " << contours.size() << std::endl;
 
     // Find longest contour
     float max_perimeter = 0;
@@ -61,19 +67,41 @@ cv::Mat ClassifyImage(cv::Mat inputImage) {
                        hierarchy, 0);
       // double area = cv::contourArea(contours[i], false);
       // std::cout << "Contour area: " << area << std::endl;
-      double perimeter = cv::arcLength(contours[i], false);
-      std::cout << "Arc length: " << perimeter << std::endl;
-
-      if (perimeter > max_perimeter) {
-        max_perimeter = perimeter;
-      }
-      std::cout << "Max length: " << max_perimeter << std::endl;
+      // double perimeter = cv::arcLength(contours[i], false);
+      // std::cout << "Arc length: " << perimeter << std::endl;
     }
+    
+    // Match contours
+    std::vector<std::vector<cv::Point> > diamondContour = loadContour("./images/diamond.png");
+    std::vector<std::vector<cv::Point> > squiggleContour = loadContour("./images/squiggle.png");
+    std::vector<std::vector<cv::Point> > ovalContour = loadContour("./images/oval_small.png");
 
-    std::string contourSave = "oval.png";
-    saveContour( contourSave, contours, contourOverlay.size());
+    double matchDiamond = cv::matchShapes(contours[0], diamondContour[0], 1, 0.0);
+    double matchSqiggle = cv::matchShapes(contours[0], squiggleContour[0], 1, 0.0); 
+    double matchOval = cv::matchShapes(contours[0], ovalContour[0], 1, 0.0); 
 
-    // double match = cv::matchShapes(contours[0], contours[1], 1, 0.0);
-    // std::cout << "Match: " << match << std::endl;
+    std::cout << "   diamond: " << matchDiamond 
+              << " | squiggle: " << matchSqiggle 
+              << " | oval: " << matchOval 
+              << std::endl;
+
+    std::string options [3] = {"diamond", "squiggle", "oval"};
+    double matches [3] = {matchDiamond, matchSqiggle, matchOval};
+    double minMatch = 1;
+    int minIndex = 0;
+    for (int i = 0; i < 3; i++) {
+      if (matches[i] < minMatch) {
+        minMatch = matches[i];
+        minIndex = i;
+      }
+    }
+    // double test = *std::min_element(matches, matches + 3);
+    // std::cout << test << std::endl;
+
+    std::cout << "\n";
+    std::cout << " >> Count:   " << numberShapes << std::endl;
+    std::cout << " >> Color:   " << color << std::endl;
+    std::cout << " >> Shape:   " << options[minIndex] << std::endl;
+
     return contourOverlay;
 }
