@@ -1,7 +1,7 @@
-
 #include <string>
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
+#include "SaveContour.cpp"
 
 cv::Scalar min_thresh [3] = {cv::Scalar(0, 100, 100),   // red
                             cv::Scalar(60, 100, 100),   // green
@@ -30,6 +30,7 @@ cv::Mat ClassifyImage(cv::Mat inputImage) {
         double coloredPixels = cv::countNonZero(threshImage);
         // std::cout << colors[i] << " non zero pixels: " << coloredPixels << std::endl;
     
+        // TODO will this need a tollerance?
         if ( coloredPixels > 0 ){
           std::cout << " +++++ Color is: " << colors[i] << std::endl;
           break;
@@ -49,6 +50,9 @@ cv::Mat ClassifyImage(cv::Mat inputImage) {
 
     std::cout << " +++++ Number of shapes: " << contours.size() << std::endl;
 
+    // Find longest contour
+    float max_perimeter = 0;
+
     // Draw contours
     cv::Mat contourOverlay = threshImage.clone();
     cv::cvtColor(contourOverlay, contourOverlay, cv::COLOR_GRAY2RGB);
@@ -57,7 +61,19 @@ cv::Mat ClassifyImage(cv::Mat inputImage) {
                        hierarchy, 0);
       // double area = cv::contourArea(contours[i], false);
       // std::cout << "Contour area: " << area << std::endl;
+      double perimeter = cv::arcLength(contours[i], false);
+      std::cout << "Arc length: " << perimeter << std::endl;
+
+      if (perimeter > max_perimeter) {
+        max_perimeter = perimeter;
+      }
+      std::cout << "Max length: " << max_perimeter << std::endl;
     }
 
+    std::string contourSave = "oval.png";
+    saveContour( contourSave, contours, contourOverlay.size());
+
+    // double match = cv::matchShapes(contours[0], contours[1], 1, 0.0);
+    // std::cout << "Match: " << match << std::endl;
     return contourOverlay;
 }
