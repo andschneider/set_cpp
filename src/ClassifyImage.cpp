@@ -38,7 +38,7 @@ int DetermineColor(cv::Mat hsvImage){
 
 
 // Image classifier to determine color, shape, fill, and count.
-cv::Mat ClassifyImage(cv::Mat inputImage) {
+std::vector<char>  ClassifyImage(cv::Mat inputImage) {
 
     int color_index = DetermineColor(inputImage);
     std::string color = colors[color_index];
@@ -52,22 +52,14 @@ cv::Mat ClassifyImage(cv::Mat inputImage) {
                     CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
 
     int numberShapes = contours.size();
-    // std::cout << " +++++ Number of shapes: " << contours.size() << std::endl;
-
-    // Find longest contour
-    float max_perimeter = 0;
 
     // Draw contours
-    cv::Mat contourOverlay = threshImage.clone();
-    cv::cvtColor(contourOverlay, contourOverlay, cv::COLOR_GRAY2RGB);
-    for (int i = 0; i < contours.size(); i++) {
-      cv::drawContours(contourOverlay, contours, i, CV_RGB(0, 0, 255), 2, 8,
-                       hierarchy, 0);
-      // double area = cv::contourArea(contours[i], false);
-      // std::cout << "Contour area: " << area << std::endl;
-      // double perimeter = cv::arcLength(contours[i], false);
-      // std::cout << "Arc length: " << perimeter << std::endl;
-    }
+    // cv::Mat contourOverlay = threshImage.clone();
+    // // cv::cvtColor(contourOverlay, contourOverlay, cv::COLOR_GRAY2RGB);
+    // for (int i = 0; i < contours.size(); i++) {
+    //   cv::drawContours(contourOverlay, contours, i, CV_RGB(0, 0, 255), 2, 8,
+    //                    hierarchy, 0);
+    // }
     
     // Match contours
     std::vector<std::vector<cv::Point> > diamondContour = loadContour("./images/diamond.png");
@@ -83,7 +75,7 @@ cv::Mat ClassifyImage(cv::Mat inputImage) {
               << " | oval: " << matchOval 
               << std::endl;
 
-    std::string options [3] = {"diamond", "squiggle", "oval"};
+    std::string options [3] = {"diamond", "oval", "squiggle"};
     double matches [3] = {matchDiamond, matchSqiggle, matchOval};
     double minMatch = 1;
     int minIndex = 0;
@@ -93,13 +85,12 @@ cv::Mat ClassifyImage(cv::Mat inputImage) {
         minIndex = i;
       }
     }
-    // double test = *std::min_element(matches, matches + 3);
-    // std::cout << test << std::endl;
 
     std::cout << "\n";
     std::cout << " >> Count:   " << numberShapes << std::endl;
     std::cout << " >> Color:   " << color << std::endl;
     std::cout << " >> Shape:   " << options[minIndex] << std::endl;
 
-    return contourOverlay;
+    // return contourOverlay;
+    return std::vector<char>{(char)numberShapes, (char)color_index, (char)minIndex};
 }
