@@ -9,10 +9,6 @@ int main(int argc, char *argv[]) {
     std::string filePath = argv[1];
     cv::Mat img = loadImg(filePath);
 
-    // std::string filePath = "./images/g_1_d_e_noBorder.png";
-    // cv::Mat img2 = loadImg("./images/b_2_s_h_noBorder.png");
-    // cv::Mat img3 = loadImg("./images/r_3_o_f_noBorder.png");
-
     cv::Mat classImg = ClassifyImage(img);
 
     cv::namedWindow("Display Image", cv::WINDOW_AUTOSIZE);

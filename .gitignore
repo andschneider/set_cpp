@@ -39,6 +39,7 @@ CMakeFiles/
 
 Makefile
 
-dispImg
 
 threshImg
+classifyCard
+runTests

@@ -5,6 +5,8 @@
 #include <opencv2/opencv.hpp>
 #include "SaveContour.cpp"
 
+
+// TODO gotta be a better way to do this
 cv::Scalar min_thresh [3] = {cv::Scalar(0, 100, 100),   // red
                             cv::Scalar(60, 100, 100),   // green
                             cv::Scalar(110, 50, 100)};  // blue
@@ -15,38 +17,34 @@ cv::Scalar max_thresh [3] = {cv::Scalar(20, 255, 255),
 
 std::string colors[3] = {"red", "green", "blue"};
 
-// Image classifier to determine color, shape, fill, and count.
-cv::Mat ClassifyImage(cv::Mat inputImage) {
-    // Convert to greyscale
-    // cv::Mat greyImage;
-    // cv::cvtColor(inputImage, greyImage, cv::COLOR_BGR2GRAY);
 
-    cv::Mat hsvImage;
-    cv::cvtColor(inputImage, hsvImage, cv::COLOR_BGR2HSV);
-
-    // Threshold
+int DetermineColor(cv::Mat hsvImage){
+    // Apply range of thresholds to determine color
     cv::Mat threshImage;
-    std::string color;
+    // std::string color;
+    int color;
     for (int i = 0; i < 3; i++) {
       cv::inRange(hsvImage, min_thresh[i], max_thresh[i], threshImage);
 
       double coloredPixels = cv::countNonZero(threshImage);
-      // std::cout << colors[i] << " non zero pixels: " << coloredPixels <<
-      // std::endl;
-
-      // TODO will this need a tollerance?
       if (coloredPixels > 0) {
-        color = colors[i];
-        // std::cout << " +++++ Color is: " << colors[i] << std::endl;
+        // color = colors[i];
+        color = i;
         break;
       }
     }
+    return color;
+}
 
-    // Determine edges using Canny
-    // cv::Mat cannyImage;
-    // cv::floodFill(greyImage, cv::Point(0, 0), cv::Scalar(0));
-    // cv::Canny(threshImage, cannyImage, 140, 250, 3);
 
+// Image classifier to determine color, shape, fill, and count.
+cv::Mat ClassifyImage(cv::Mat inputImage) {
+
+    int color_index = DetermineColor(inputImage);
+    std::string color = colors[color_index];
+
+    cv::Mat threshImage;
+    cv::inRange(inputImage, min_thresh[color_index], max_thresh[color_index], threshImage);
     // Find contours
     std::vector<std::vector<cv::Point> > contours;
     std::vector<cv::Vec4i> hierarchy;
