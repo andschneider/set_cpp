@@ -9,26 +9,24 @@
 // TODO gotta be a better way to do this
 cv::Scalar min_thresh [3] = {cv::Scalar(0, 100, 100),   // red
                             cv::Scalar(60, 100, 100),   // green
-                            cv::Scalar(110, 50, 100)};  // blue
+                            cv::Scalar(110, 50, 100)};  // purple TODO recalibrate for purple
 
 cv::Scalar max_thresh [3] = {cv::Scalar(20, 255, 255),
                             cv::Scalar(80, 255, 255),
                             cv::Scalar(130, 150, 255)};
 
-std::string colors[3] = {"red", "green", "blue"};
+std::string colors[3] = {"red", "green", "purple"};
 
 
 int DetermineColor(cv::Mat hsvImage){
     // Apply range of thresholds to determine color
-    cv::Mat threshImage;
-    // std::string color;
     int color;
     for (int i = 0; i < 3; i++) {
+      cv::Mat threshImage;
       cv::inRange(hsvImage, min_thresh[i], max_thresh[i], threshImage);
 
       double coloredPixels = cv::countNonZero(threshImage);
       if (coloredPixels > 0) {
-        // color = colors[i];
         color = i;
         break;
       }
@@ -37,7 +35,7 @@ int DetermineColor(cv::Mat hsvImage){
 }
 
 
-// Image classifier to determine color, shape, fill, and count.
+// Image classifier to determine color, shape, shading, and number.
 std::vector<char>  ClassifyImage(cv::Mat inputImage) {
 
     int color_index = DetermineColor(inputImage);
@@ -75,22 +73,22 @@ std::vector<char>  ClassifyImage(cv::Mat inputImage) {
               << " | oval: " << matchOval 
               << std::endl;
 
-    std::string options [3] = {"diamond", "oval", "squiggle"};
+    std::string shapes [3] = {"diamond", "oval", "squiggle"};
     double matches [3] = {matchDiamond, matchSqiggle, matchOval};
     double minMatch = 1;
-    int minIndex = 0;
+    int shape_index = 0;
     for (int i = 0; i < 3; i++) {
       if (matches[i] < minMatch) {
         minMatch = matches[i];
-        minIndex = i;
+        shape_index = i;
       }
     }
 
     std::cout << "\n";
-    std::cout << " >> Count:   " << numberShapes << std::endl;
+    std::cout << " >> Number:  " << numberShapes << std::endl;
     std::cout << " >> Color:   " << color << std::endl;
-    std::cout << " >> Shape:   " << options[minIndex] << std::endl;
+    std::cout << " >> Shape:   " << shapes[shape_index] << std::endl;
 
     // return contourOverlay;
-    return std::vector<char>{(char)numberShapes, (char)color_index, (char)minIndex};
+    return std::vector<char>{(char)numberShapes, (char)color_index, (char)shape_index};
 }

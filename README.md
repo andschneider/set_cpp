@@ -2,9 +2,9 @@
 
 ## iamge names
 
-__color_count_shape_fill__
+__shape_color_number_shading__
 
-color : r, g, b
-count : 1, 2, 3
 shape : d (diamond), o (oval), s (squiggle)
-fill  : e (empty), f (filled), h (hatch)
+color : r, g, p
+number : 1, 2, 3
+shading: o (outlined), s (solid), s (striped)
