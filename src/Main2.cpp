@@ -30,6 +30,7 @@ int main(int argc, char *argv[]) {
     card.ShowRgbImage();
     card.ShowHsvImage();
     card.ShowThreshImage();
+    card.ShowContourImage();
 
     cv::waitKey(0);
 
