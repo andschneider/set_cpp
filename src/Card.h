@@ -30,6 +30,7 @@ class Card {
 
   std::string colors[3] = {"red", "green", "purple"};
   std::string shapes[3] = {"diamond", "oval", "squiggle"};
+  std::string shadings[3] = {"outlined", "solid", "striped"};
   std::vector<std::vector<Point> > contours;
 
  public:
@@ -45,6 +46,7 @@ class Card {
   int DetermineColor();
   int DetermineNumber();
   int DetermineShape();
+  int DetermineShading();
   void ShowRgbImage();
   void ShowHsvImage();
   void ShowThreshImage();
@@ -132,6 +134,44 @@ int Card::DetermineShape() {
       }
     }
     return shape_id;
+}
+
+// Finds the shading of the symbol. Either outlined (0), solid (1), or striped (2).
+int Card::DetermineShading() {
+  // Flood fill contour
+  std::vector<Vec4i> hierarchy;
+  Mat filled = Mat::zeros(threshImage.size(), CV_8UC1);
+  drawContours(filled, contours, 0, CV_RGB(255, 255, 255), -1, 8, hierarchy, 0);
+
+  // Subract border from flood fill
+  // TODO the border size will need to be tuned
+  drawContours(filled, contours, 0, CV_RGB(0, 0, 0), 100, 8, hierarchy, 0);
+  
+  // Create mask and apply
+  Mat mask, isolated;
+  bitwise_not(filled, mask);
+  bitwise_and(threshImage, filled, isolated);
+//   imshow("filled image", mask);
+//   imshow("isolated image", isolated);
+
+  // Determine pixels remaining
+  int count_black = cv::countNonZero(mask == 0);
+  int count_white = cv::countNonZero(isolated == 255);
+  int percent_remaining = ((float)count_white / (float)count_black) * 100;
+//   std::cout << "black: " << count_black << " | white: " << count_white << " | %: " << percent_remaining << std::endl;
+
+  // TODO these ranges probably need to be tuned
+  if (percent_remaining < 3) {
+    shading_id = 0;
+    shading = shadings[0];
+  } else if (percent_remaining > 90) {
+    shading_id = 1;
+    shading = shadings[1];
+  }
+  else {
+    shading_id = 2;
+    shading = shadings[2];
+  }
 }
 
 void Card::ShowRgbImage() {

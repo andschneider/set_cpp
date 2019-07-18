@@ -13,6 +13,7 @@ int main(int argc, char *argv[]) {
     card.DetermineColor();
     card.DetermineNumber();
     card.DetermineShape();
+    card.DetermineShading();
 
     std::vector<char> img_identifier = card.GetClassification();
     std::vector<std::string> img_string = card.GetCardInfo();
