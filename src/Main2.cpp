@@ -28,11 +28,12 @@ int main(int argc, char *argv[]) {
     }
     std::cout << std::endl;  // flush before image pops up
 
-    card.ShowRgbImage();
-    card.ShowHsvImage();
-    card.ShowThreshImage();
-    card.ShowContourImage();
+    // card.ShowRgbImage();
+    // card.ShowHsvImage();
+    // card.ShowThreshImage();
+    // card.ShowContourImage();
 
+    card.DisplayText();
     cv::waitKey(0);
 
     return 0;

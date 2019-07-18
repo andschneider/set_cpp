@@ -47,10 +47,12 @@ class Card {
   int DetermineNumber();
   int DetermineShape();
   int DetermineShading();
+
   void ShowRgbImage();
   void ShowHsvImage();
   void ShowThreshImage();
   void ShowContourImage();
+  void DisplayText();
   ~Card();
 };
 
@@ -114,7 +116,7 @@ int Card::DetermineNumber() {
       drawContours(contourImage, contours, i, CV_RGB(0, 0, 255), 2, 8,
                        hierarchy, 0);
     }
-    saveContour("diamond.png", contours, hsvImage.size());
+    // saveContour("diamond.png", contours, hsvImage.size());
     
     number = contours.size() - 1;
     return number;
@@ -196,4 +198,18 @@ void Card::ShowThreshImage() {
 void Card::ShowContourImage() {
     namedWindow("Contour Image", WINDOW_AUTOSIZE);
     imshow("Contour Image", contourImage);
+}
+void Card::DisplayText() {
+    // write result on image
+    std::string displayText;
+    
+    Point center(rgbImage.cols / 3, rgbImage.rows / 4);
+
+    for (std::string text : GetCardInfo()) {
+      cv::putText(rgbImage, text, center, CV_FONT_HERSHEY_SIMPLEX, 2,
+                  Scalar(0));
+      center.y -= 50;
+    }
+    namedWindow("Text Image", WINDOW_AUTOSIZE);
+    imshow("Text Image", rgbImage);
 }
