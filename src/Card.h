@@ -5,7 +5,7 @@
 
 using namespace cv;
 
-std::vector<std::vector<Point> > diamondContour = loadContour("./images/diamond.png");
+std::vector<std::vector<Point> > diamondContour = loadContour("./images/diamond2.png");
 std::vector<std::vector<Point> > squiggleContour = loadContour("./images/squiggle.png");
 std::vector<std::vector<Point> > ovalContour = loadContour("./images/oval2.png");
 
@@ -96,9 +96,16 @@ int Card::DetermineColor() {
 
 // Finds the number of symbols per card. Cards have either 1, 2, or 3 but this gets remapped to 0, 1, or 2.
 int Card::DetermineNumber() {
+    // Dilate and erode
+    Mat erroded, dilated;
+    dilate(threshImage, dilated, Mat(), Point(-1, -1), 4);
+    erode(dilated, erroded, Mat(), Point(-1,-1),3);
+    // imshow("dilated", dilated);
+    // imshow("erode", erroded);
+
     // Find contours
     std::vector<Vec4i> hierarchy;
-    findContours(threshImage, contours, hierarchy, CV_RETR_EXTERNAL,
+    findContours(dilated, contours, hierarchy, CV_RETR_EXTERNAL,
                     CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
 
     // Draw contours
@@ -107,7 +114,7 @@ int Card::DetermineNumber() {
       drawContours(contourImage, contours, i, CV_RGB(0, 0, 255), 2, 8,
                        hierarchy, 0);
     }
-    // saveContour("contour.png", contours, hsvImage.size());
+    saveContour("diamond.png", contours, hsvImage.size());
     
     number = contours.size() - 1;
     return number;
