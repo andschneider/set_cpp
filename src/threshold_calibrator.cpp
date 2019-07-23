@@ -3,7 +3,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "LoadImage.cpp"
+#include "load_image.cpp"
 
 static const std::string RAW_WINDOW = "raw window";
 static const std::string CONVERTED_WINDOW = "converted window";
@@ -34,10 +34,10 @@ void threshold_img(int, void*) {
 int main( int argc, char** argv )
 {
   // Load an image
-  cv::Mat img = loadImg( argv[1] );
+  cv_hsv = LoadImg( argv[1] );
 
   // Convert to hsv
-  cv::cvtColor(img, cv_hsv, cv::COLOR_BGR2HSV);
+  // cv::cvtColor(img, cv_hsv, cv::COLOR_BGR2HSV);
 
   // Create a window
   cv::namedWindow( RAW_WINDOW , CV_WINDOW_AUTOSIZE );

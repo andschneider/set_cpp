@@ -1,13 +1,12 @@
 #include <string>
 #include <opencv2/opencv.hpp>
 
-#include "LoadImage.cpp"
-// #include "ClassifyImage.cpp"
-#include "Card.h"
+#include "load_image.cpp"
+#include "card.h"
 
 int main(int argc, char *argv[]) { 
     std::string filePath = argv[1];
-    cv::Mat img = loadImg(filePath, false);
+    cv::Mat img = LoadImg(filePath, false);
 
     Card card = Card(img);
     card.DetermineColor();
