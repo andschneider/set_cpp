@@ -17,13 +17,16 @@ int main(int argc, char *argv[]) {
   std::vector<char> img_identifier = card.GetClassification();
   std::vector<std::string> img_string = card.GetCardInfo();
 
-  std::cout << "shape, color, number, shading" << std::endl;
+  std::cout << "  type |  shape  |  color  |  number |  shading " << std::endl;
+  std::cout << "------------------------------------------------" << std::endl;
+  std::cout << "vector |";
   for (int x : img_identifier) {
-    std::cout << x << " ";
+    std::cout << std::setw(8) << std::setfill(' ') << x << " |";
   }
   std::cout << '\n';
+  std::cout << " human |";
   for (std::string x : img_string) {
-    std::cout << x << " ";
+    std::cout << std::setw(8) << std::setfill(' ') << x << " |";
   }
   std::cout << std::endl;  // flush before image pops up
 

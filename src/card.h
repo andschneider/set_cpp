@@ -8,7 +8,7 @@ using namespace cv;
 std::vector<std::vector<Point> > diamond_contour =
     LoadContour("./images/diamond2.png");
 std::vector<std::vector<Point> > squiggle_contour =
-    LoadContour("./images/squiggle.png");
+    LoadContour("./images/squiggle2.png");
 std::vector<std::vector<Point> > oval_contour =
     LoadContour("./images/oval2.png");
 
@@ -79,8 +79,7 @@ int Card::DetermineColor() {
   }
 
   // purple
-  // TODO recalibrate ranges
-  inRange(hsv_image_, Scalar(110, 50, 100), Scalar(130, 150, 255),
+  inRange(hsv_image_, Scalar(140, 50, 50), Scalar(160, 250, 255),
           thresh_image_);
   if (countNonZero(thresh_image_) > 0) {
     color_id_ = 2;
@@ -121,7 +120,7 @@ int Card::DetermineNumber() {
     drawContours(contour_image_, contours_, i, CV_RGB(0, 0, 255), 2, 8,
                  hierarchy, 0);
   }
-  // SaveContour("diamond.png", contours_, hsv_image_.size());
+  // SaveContour("squiggle.png", contours_, hsv_image_.size());
 
   num_symbol_ = contours_.size() - 1;
   return num_symbol_;
@@ -133,8 +132,8 @@ int Card::DetermineShape() {
   double matchSqiggle = matchShapes(contours_[0], squiggle_contour[0], 1, 0.0);
   double matchOval = matchShapes(contours_[0], oval_contour[0], 1, 0.0);
 
-  std::cout << "   diamond: " << matchDiamond << " | squiggle: " << matchSqiggle
-            << " | oval: " << matchOval << std::endl;
+  // std::cout << "   diamond: " << matchDiamond << " | squiggle: " << matchSqiggle
+            // << " | oval: " << matchOval << std::endl;
 
   double matches[3] = {matchDiamond, matchOval, matchSqiggle};
   double minMatch = 1;
@@ -165,15 +164,15 @@ int Card::DetermineShading() {
   Mat mask, isolated;
   bitwise_not(filled, mask);
   bitwise_and(thresh_image_, filled, isolated);
-  //   imshow("filled image", mask);
-  //   imshow("isolated image", isolated);
+  // imshow("filled image", mask);
+  // imshow("isolated image", isolated);
 
   // Determine pixels remaining
   int count_black = cv::countNonZero(mask == 0);
   int count_white = cv::countNonZero(isolated == 255);
   int percent_remaining = ((float)count_white / (float)count_black) * 100;
-  //   std::cout << "black: " << count_black << " | white: " << count_white << "
-  //   | %: " << percent_remaining << std::endl;
+  // std::cout << "black: " << count_black << " | white: " << count_white
+  // << "    | %: " << percent_remaining << std::endl;
 
   // TODO these ranges probably need to be tuned
   if (percent_remaining < 3) {
@@ -186,6 +185,7 @@ int Card::DetermineShading() {
     shading_id_ = 2;
     shading_ = shadings_[2];
   }
+  return shading_id_;
 }
 
 void Card::ShowRgbImage() {
