@@ -43,3 +43,7 @@ Makefile
 bin/
 
 \.vscode/
+
+googletest/
+
+googletest-download/
