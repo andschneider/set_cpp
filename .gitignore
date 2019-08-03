@@ -40,8 +40,6 @@ CMakeFiles/
 Makefile
 
 
-threshImg
-classifyCard
-runTests
+bin/
 
 \.vscode/

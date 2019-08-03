@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 3.5)
 project( set_cpp )
 add_compile_options(-std=c++11)
 
-find_package( OpenCV REQUIRED )
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-add_executable( classifyCard src/main.cpp )
-target_link_libraries( classifyCard ${OpenCV_LIBS} )
+add_subdirectory(src)
 
-add_executable( threshImg src/threshold_calibrator.cpp )
-target_link_libraries( threshImg ${OpenCV_LIBS} )
+if (testing_enabled)
+    add_subdirectory(tests)
+endif()
