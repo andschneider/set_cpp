@@ -9,15 +9,12 @@ int main(int argc, char *argv[]) {
   cv::Mat img = LoadImg(filePath, false);
 
   Card card = Card(img);
-  card.DetermineColor();
-  card.DetermineNumber();
-  card.DetermineShape();
-  card.DetermineShading();
+  card.ClassifyCard();
 
   std::vector<char> img_identifier = card.GetClassification();
   std::vector<std::string> img_string = card.GetCardInfo();
 
-  std::cout << "  type |  shape  |  color  |  number |  shading " << std::endl;
+  std::cout << "  type |  color  |  number |  shape  |  shading " << std::endl;
   std::cout << "------------------------------------------------" << std::endl;
   std::cout << "vector |";
   for (int x : img_identifier) {

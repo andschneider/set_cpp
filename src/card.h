@@ -13,6 +13,27 @@ std::vector<std::vector<Point> > oval_contour =
     LoadContour("./images/oval2.png");
 
 class Card {
+ public:
+  Card(Mat rgb_image_);
+  std::vector<char> GetClassification() { return classification_; }
+  // human readable information
+  std::vector<std::string> GetCardInfo() {
+    return std::vector<std::string>{color_, std::to_string(num_symbol_ + 1),
+                                    shape_, shading_};
+  }
+  void ClassifyCard();
+  int DetermineColor();
+  int DetermineNumber();
+  int DetermineShape();
+  int DetermineShading();
+
+  void ShowRgbImage();
+  void ShowHsvImage();
+  void ShowThreshImage();
+  void ShowContourImage();
+  void DisplayText();
+  ~Card();
+
  private:
   // card properties
   std::string shape_;
@@ -34,38 +55,21 @@ class Card {
   std::string colors_[3] = {"red", "green", "purple"};
   std::string shapes_[3] = {"diamond", "oval", "squiggle"};
   std::string shadings_[3] = {"outlined", "solid", "striped"};
-
- public:
-  Card(Mat rgb_image_);
-  std::vector<char> GetClassification() {
-    // TODO add these to the classification_ class variable when they are
-    // calculated
-    return std::vector<char>{(char)shape_id_, (char)color_id_,
-                             (char)num_symbol_, (char)shading_id_};
-  }
-  std::vector<std::string> GetCardInfo() {
-    return std::vector<std::string>{shape_, color_,
-                                    std::to_string(num_symbol_ + 1), shading_};
-  }
-  int DetermineColor();
-  int DetermineNumber();
-  int DetermineShape();
-  int DetermineShading();
-
-  void ShowRgbImage();
-  void ShowHsvImage();
-  void ShowThreshImage();
-  void ShowContourImage();
-  void DisplayText();
-  ~Card();
 };
 
-Card::Card(Mat inputImage) {
-  rgb_image_ = inputImage.clone();
+Card::Card(Mat input_image) {
+  rgb_image_ = input_image.clone();
   cvtColor(rgb_image_, hsv_image_, COLOR_BGR2HSV);
 }
 
 Card::~Card() {}
+
+void Card::ClassifyCard() { 
+  DetermineColor();
+  DetermineNumber();
+  DetermineShape();
+  DetermineShading();
+}
 
 // Finds the color of the symbols. Either red (0), green (1), or purple (2).
 int Card::DetermineColor() {
@@ -75,6 +79,7 @@ int Card::DetermineColor() {
   if (countNonZero(thresh_image_) > 0) {
     color_id_ = 1;
     color_ = colors_[1];
+    classification_.push_back((char)color_id_);
     return color_id_;
   }
 
@@ -84,6 +89,7 @@ int Card::DetermineColor() {
   if (countNonZero(thresh_image_) > 0) {
     color_id_ = 2;
     color_ = colors_[2];
+    classification_.push_back((char)color_id_);
     return color_id_;
   }
 
@@ -95,6 +101,7 @@ int Card::DetermineColor() {
   if (countNonZero(thresh_image_) > 0) {
     color_id_ = 0;
     color_ = colors_[0];
+    classification_.push_back((char)color_id_);
     return color_id_;
   }
 }
@@ -123,6 +130,7 @@ int Card::DetermineNumber() {
   // SaveContour("squiggle.png", contours_, hsv_image_.size());
 
   num_symbol_ = contours_.size() - 1;
+  classification_.push_back((char)num_symbol_);
   return num_symbol_;
 }
 
@@ -144,10 +152,11 @@ int Card::DetermineShape() {
       shape_ = shapes_[i];
     }
   }
+  classification_.push_back((char)shape_id_);
   return shape_id_;
 }
 
-// Finds the shading_ of the symbol. Either outlined (0), solid (1), or striped
+// Finds the shading of the symbol. Either outlined (0), solid (1), or striped
 // (2).
 int Card::DetermineShading() {
   // Flood fill contour
@@ -185,6 +194,7 @@ int Card::DetermineShading() {
     shading_id_ = 2;
     shading_ = shadings_[2];
   }
+  classification_.push_back((char)shading_id_);
   return shading_id_;
 }
 

@@ -4,6 +4,6 @@ add_compile_options(-std=c++11)
 
 find_package( OpenCV REQUIRED )
 
-add_executable(testClassifiers test_card_classifiers.cpp)
-target_link_libraries(testClassifiers gtest_main ${OpenCV_LIBS})
-add_test(NAME testClassifiers COMMAND testClassifiers)
+add_executable(all_tests test_main.cpp)
+target_link_libraries(all_tests gtest_main ${OpenCV_LIBS})
+add_test(NAME all_tests COMMAND all_tests)
