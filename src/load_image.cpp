@@ -1,3 +1,6 @@
+#ifndef LOAD_IMAGE
+#define LOAD_IMAGE
+
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
 #include <string>
@@ -17,3 +20,5 @@ cv::Mat LoadImg(std::string file_path, bool hsv = true) {
   }
   return input_image;
 }
+
+#endif

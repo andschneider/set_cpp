@@ -1,3 +1,6 @@
+#ifndef CARD_H_
+#define CARD_H_
+
 #include <opencv2/opencv.hpp>
 #include <string>
 #include <vector>
@@ -5,11 +8,11 @@
 
 using namespace cv;
 
-std::vector<std::vector<Point> > diamond_contour =
+const std::vector<std::vector<Point> > diamond_contour =
     LoadContour("./images/diamond2.png");
-std::vector<std::vector<Point> > squiggle_contour =
+const std::vector<std::vector<Point> > squiggle_contour =
     LoadContour("./images/squiggle2.png");
-std::vector<std::vector<Point> > oval_contour =
+const std::vector<std::vector<Point> > oval_contour =
     LoadContour("./images/oval2.png");
 
 class Card {
@@ -228,3 +231,5 @@ void Card::DisplayText() {
   namedWindow("Text Image", WINDOW_AUTOSIZE);
   imshow("Text Image", rgb_image_);
 }
+
+#endif
