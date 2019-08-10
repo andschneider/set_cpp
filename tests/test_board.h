@@ -10,7 +10,7 @@ TEST(SET_CALCS, SET) {
 
   std::vector<std::vector<char>> cards{g_1_d_o, p_2_s_h, r_3_o_s};
 
-  Board test_board = Board(cards);
+  Board test_board(cards);
   bool is_set = test_board.FindSet();
   ASSERT_EQ(is_set, true);
 }
@@ -22,7 +22,7 @@ TEST(SET_CALCS, NO_SET) {
 
   std::vector<std::vector<char>> cards{g_1_d_s, p_2_s_h, r_3_o_s};
 
-  Board test_board = Board(cards);
+  Board test_board(cards);
   bool is_set = test_board.FindSet();
   ASSERT_EQ(is_set, false);
 }

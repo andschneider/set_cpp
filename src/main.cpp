@@ -1,14 +1,14 @@
 #include <opencv2/opencv.hpp>
 #include <string>
 
-#include "card.h"
+#include "card.cpp"
 #include "load_image.cpp"
 
 int main(int argc, char *argv[]) {
   std::string filePath = argv[1];
   cv::Mat img = LoadImg(filePath, false);
 
-  Card card = Card(img);
+  Card card(img);
   card.ClassifyCard();
 
   std::vector<char> img_identifier = card.GetClassification();
