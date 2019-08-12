@@ -36,6 +36,7 @@ void Card::DetermineColor() {
   if (countNonZero(thresh_image_) > 0) {
     color_id_ = 1;
     classification_.push_back((char)color_id_);
+    return;
   }
 
   // purple
@@ -44,6 +45,7 @@ void Card::DetermineColor() {
   if (countNonZero(thresh_image_) > 0) {
     color_id_ = 2;
     classification_.push_back((char)color_id_);
+    return;
   }
 
   // red
@@ -54,6 +56,7 @@ void Card::DetermineColor() {
   if (countNonZero(thresh_image_) > 0) {
     color_id_ = 0;
     classification_.push_back((char)color_id_);
+    return;
   }
 }
 

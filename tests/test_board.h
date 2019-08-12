@@ -1,7 +1,7 @@
 #include <vector>
 #include "gtest/gtest.h"
 
-#include "../src/board.h"
+#include "../src/board.cpp"
 
 TEST(SET_CALCS, SET) {
   std::vector<char> g_1_d_o = {1, 0, 0, 0};

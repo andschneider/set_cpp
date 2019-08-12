@@ -54,7 +54,7 @@ This has only been ran on Ubuntu 16.04 at this time.
     ./bin/all_tests
     ```
 
-4) Or test a single card and for visual verifcation:
+4) Or test a single card for visual verifcation:
 
     ```bash
     ./bin/classifyCard ./images/r_3_o_h_noBorder.jpg

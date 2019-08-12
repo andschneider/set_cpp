@@ -5,6 +5,7 @@
 
 TEST(IMAGE_CLASSIFICATION, G_1_D_O_CARD) {
   Card green_card(LoadImg("./images/g_1_d_e_noBorder.png", false));
+  green_card.ClassifyCard();
   std::vector<char> classification = {1, 0, 0, 0};
 
   ASSERT_EQ(green_card.GetColor(), 1);
@@ -16,6 +17,7 @@ TEST(IMAGE_CLASSIFICATION, G_1_D_O_CARD) {
 
 TEST(IMAGE_CLASSIFICATION, P_2_S_H_CARD) {
   Card purple_card(LoadImg("./images/p_2_s_h_noBorder.jpg", false));
+  purple_card.ClassifyCard();
   std::vector<char> classification = {2, 1, 2, 2};
 
   ASSERT_EQ(purple_card.GetColor(), 2);
@@ -27,6 +29,7 @@ TEST(IMAGE_CLASSIFICATION, P_2_S_H_CARD) {
 
 TEST(IMAGE_CLASSIFICATION, R_3_O_S_CARD) {
   Card red_card(LoadImg("./images/r_3_o_s_noBorder.jpg", false));
+  red_card.ClassifyCard();
   std::vector<char> classification = {0, 2, 1, 1};
 
   ASSERT_EQ(red_card.GetColor(), 0);
