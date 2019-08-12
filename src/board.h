@@ -2,7 +2,6 @@
 #define BOARD_H_
 
 #include <vector>
-#include "card.h"
 
 class Board {
  public:

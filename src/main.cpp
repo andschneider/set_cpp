@@ -2,7 +2,7 @@
 #include <string>
 
 #include "card.cpp"
-#include "load_image.cpp"
+#include "utils/load_image.cpp"
 
 int main(int argc, char *argv[]) {
   std::string filePath = argv[1];

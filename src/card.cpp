@@ -1,4 +1,5 @@
 #include "card.h"
+#include "utils/image_contours.cpp"
 
 using namespace cv;
 
@@ -75,7 +76,7 @@ void Card::DetermineNumber() {
   findContours(dilated, contours_, hierarchy, CV_RETR_EXTERNAL,
                CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
 
-  // Draw contours_
+  // Draw contours
   contour_image_ = rgb_image_.clone();
   for (int i = 0; i < contours_.size(); i++) {
     drawContours(contour_image_, contours_, i, CV_RGB(0, 0, 255), 2, 8,

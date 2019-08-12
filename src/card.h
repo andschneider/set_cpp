@@ -4,7 +4,6 @@
 #include <opencv2/opencv.hpp>
 #include <string>
 #include <vector>
-#include "save_contour.cpp"
 
 class Card {
  public:

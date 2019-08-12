@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
 #include "../src/card.cpp"
-#include "../src/load_image.cpp"
+#include "../src/utils/load_image.cpp"
 
 TEST(IMAGE_CLASSIFICATION, G_1_D_O_CARD) {
   Card green_card(LoadImg("./images/g_1_d_e_noBorder.png", false));
