@@ -31,8 +31,8 @@ vector<vector<Point> > LoadContour(string file_path) {
 
   vector<vector<Point> > contours;
   vector<Vec4i> hierarchy;
-  findContours(input_img, contours, hierarchy, CV_RETR_EXTERNAL,
-               CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
+  findContours(input_img, contours, hierarchy, RETR_EXTERNAL,
+               CHAIN_APPROX_SIMPLE, Point(0, 0));
 
   // cout << "Contour successfully created" << endl;
   return contours;

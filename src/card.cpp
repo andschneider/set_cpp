@@ -73,8 +73,8 @@ void Card::DetermineNumber() {
 
   // Find contours_
   std::vector<Vec4i> hierarchy;
-  findContours(dilated, contours_, hierarchy, CV_RETR_EXTERNAL,
-               CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
+  findContours(dilated, contours_, hierarchy, RETR_EXTERNAL,
+               CHAIN_APPROX_SIMPLE, Point(0, 0));
 
   // Draw contours
   contour_image_ = rgb_image_.clone();
@@ -171,7 +171,7 @@ void Card::DisplayText() {
   Point center(rgb_image_.cols / 3, rgb_image_.rows / 4);
 
   for (std::string text : GetCardInfo()) {
-    putText(rgb_image_, text, center, CV_FONT_HERSHEY_SIMPLEX, 2, Scalar(0));
+    putText(rgb_image_, text, center, FONT_HERSHEY_SIMPLEX, 2, Scalar(0));
     center.y -= 50;
   }
   namedWindow("Text Image", WINDOW_AUTOSIZE);

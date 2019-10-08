@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
   // cv::cvtColor(img, cv_hsv, cv::COLOR_BGR2HSV);
 
   // Create a window
-  cv::namedWindow(RAW_WINDOW, CV_WINDOW_AUTOSIZE);
+  cv::namedWindow(RAW_WINDOW);
 
   // Create sliders for selecting HSV threshold values
   cv::createTrackbar("lower hue", RAW_WINDOW, &slider_lower_hue, hue_max,
